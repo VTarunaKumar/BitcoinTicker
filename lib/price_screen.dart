@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:bitcoin_ticker/coin_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({Key? key}) : super(key: key);
@@ -8,7 +12,28 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String selectedCurrency = "USD";
+  String? selectedCurrency = "USD";
+  List<DropdownMenuItem<String>> getDropDownItems() {
+    List<DropdownMenuItem<String>> dropDownItems = [];
+    for (String currency in currentList) {
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      dropDownItems.add(newItem);
+    }
+    return dropDownItems;
+  }
+
+  List<Widget> getPickerItem() {
+    List<Text> pickerItem = [];
+    for (String currency in currentList) {
+      Text(currency);
+      pickerItem.add(Text(currency));
+    }
+    return pickerItem;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,31 +70,26 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-                value: selectedCurrency,
-                items: [
-                  DropdownMenuItem(
-                    child: Text("USD"),
-                    value: "USD",
-                  ),
-                  DropdownMenuItem(
-                    child: Text("EUR"),
-                    value: "EUR",
-                  ),
-                  DropdownMenuItem(
-                    child: Text("GBP"),
-                    value: "GBP",
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    selectedCurrency = value!;
-                  });
-                  print(value);
-                }),
+            child: CupertinoPicker(
+              backgroundColor: Colors.lightBlueAccent,
+              itemExtent: 32,
+              onSelectedItemChanged: (selectedIndex) {
+                print(selectedIndex);
+              },
+              children: getPickerItem(),
+            ),
           )
         ],
       ),
     );
   }
 }
+// DropdownButton<String>(
+// value: selectedCurrency,
+// items: getDropDownItems(),
+// onChanged: (value) {
+// setState(() {
+// selectedCurrency = value;
+// });
+// },
+// ),
