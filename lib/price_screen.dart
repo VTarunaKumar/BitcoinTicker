@@ -49,13 +49,27 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  // getPicker() {
-  //   if (Platform.isAndroid) {
-  //     return androidDropdownButton();
-  //   } else if (Platform.isIOS) {
-  //     return iOSPicker();
-  //   }
-  // }
+  String bitCoinValueInUSA = "?";
+  void getData() async {
+    try {
+      double data = await CoinData().getCoinData();
+      print(data);
+      setState(() {
+        bitCoinValueInUSA = data.toStringAsFixed(0);
+      });
+      print(data);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+
+    print(bitCoinValueInUSA);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +92,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 28),
                 child: Text(
-                  '1 BTC = ? USD',
+                  '1 BTC = $bitCoinValueInUSA USD',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
